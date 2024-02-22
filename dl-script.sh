@@ -3,8 +3,10 @@
 # set -e
 # set -o pipefail
 
+# Variable Setup
 LOGFILE="/tmp/ytdlp_shortcut.log";
 
+ # Forced SSH commands isolate the parameteres passed to the command.
 if [[ -n "$SSH_ORIGINAL_COMMAND" ]]; then
   CLIPTYPE=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $2}' | tr -d "\"";);
   CLIPURL=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $3}' | tr -d "\"";);
@@ -28,9 +30,7 @@ if [[ ! -d "$SAVEPATH" ]]; then
   mkdir "$SAVEPATH";
 fi
 
-cd "$SAVEPATH";
-
-
+# Save the video
 if [[ "$CLIPURL" == *"tiktok"* ]]; then
   $(cd "$SAVEPATH"; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime -o "@%(uploader)s_%(upload_date)s_%(title.:100)s_%(id)s.%(ext)s" $CLIPURL &>> $LOGFILE;) &
 else 
