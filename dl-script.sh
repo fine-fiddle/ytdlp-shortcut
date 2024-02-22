@@ -32,9 +32,9 @@ cd "$SAVEPATH";
 
 
 if [[ "$CLIPURL" == *"tiktok"* ]]; then
-  $(cd "$SAVEPATH"; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime -o "@%(uploader)s_%(upload_date)s_%(title.:100)s_%(id)s.%(ext)s" $CLIPURL >> $LOGFILE; echo "------" >> $LOGFILE;) &
+  $(cd "$SAVEPATH"; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime -o "@%(uploader)s_%(upload_date)s_%(title.:100)s_%(id)s.%(ext)s" $CLIPURL &>> $LOGFILE;) &
 else 
-  $(cd "$SAVEPATH"; opt/homebrew/bin/yt-dlp --no-progress --no-mtime "$CLIPURL" >> $LOGFILE; echo "------" >> $LOGFILE;) &
+  $(cd "$SAVEPATH"; echo "begin yt-dlp" >> $LOGFILE; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime "$CLIPURL" &>> $LOGFILE;) &
 fi
 
 
