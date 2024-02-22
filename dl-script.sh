@@ -4,14 +4,23 @@
 # set -o pipefail
 
 LOGFILE="/tmp/ytdlp_shortcut.log";
-CLIPTYPE="$1";
-CLIPURL="$2";
+
+if [[ -n "$SSH_ORIGINAL_COMMAND" ]]; then
+  CLIPTYPE=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $2}' | tr -d "\"";);
+  CLIPURL=$(echo "$SSH_ORIGINAL_COMMAND" | awk '{print $3}' | tr -d "\"";);
+else
+  CLIPTYPE="$1";
+  CLIPURL="$2";
+fi
+
 SAVEPATH="/Volumes/media/movies_clips/$CLIPTYPE";
 #for testing locally# SAVEPATH="./$CLIPTYPE";
 
-echo "---$(date)---" >> $LOGFILE;
+echo "-----\n$(date)" >> $LOGFILE;
+echo -n "parameters = ";
 printf '%s\n' "$*" >> $LOGFILE;
 echo "clip type = $CLIPTYPE" >> $LOGFILE;
+echo "ssh orig command = $SSH_ORIGINAL_COMMAND" >> $LOGFILE;
 echo "clip url = $CLIPURL" >> $LOGFILE;
 echo "savepath = $SAVEPATH" >> $LOGFILE;
 
@@ -23,11 +32,10 @@ cd "$SAVEPATH";
 
 
 if [[ "$CLIPURL" == *"tiktok"* ]]; then
-  $(cd "$SAVEPATH"; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime -o "@%(uploader)s_%(upload_date)s_%(title.:100)s_%(id)s.%(ext)s" $CLIPURL >> $LOGFILE &;);
+  $(cd "$SAVEPATH"; /opt/homebrew/bin/yt-dlp --no-progress --no-mtime -o "@%(uploader)s_%(upload_date)s_%(title.:100)s_%(id)s.%(ext)s" $CLIPURL >> $LOGFILE; echo "------" >> $LOGFILE;) &
 else 
-  $(cd "$SAVEPATH"; opt/homebrew/bin/yt-dlp --no-progress --no-mtime "$CLIPURL" >> $LOGFILE &;);
+  $(cd "$SAVEPATH"; opt/homebrew/bin/yt-dlp --no-progress --no-mtime "$CLIPURL" >> $LOGFILE; echo "------" >> $LOGFILE;) &
 fi
 
-echo "------" >> $LOGFILE;
 
 exit 0;
