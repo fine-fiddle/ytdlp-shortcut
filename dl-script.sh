@@ -19,7 +19,7 @@ SAVEPATH="/Volumes/media/movies_clips/$CLIPTYPE";
 #for testing locally# SAVEPATH="./$CLIPTYPE";
 
 echo "-----\n$(date)" >> $LOGFILE;
-echo -n "parameters = ";
+echo -n "parameters = "; >> $LOGFILE;
 printf '%s\n' "$*" >> $LOGFILE;
 echo "clip type = $CLIPTYPE" >> $LOGFILE;
 echo "ssh orig command = $SSH_ORIGINAL_COMMAND" >> $LOGFILE;
